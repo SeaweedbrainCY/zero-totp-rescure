@@ -1,0 +1,64 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+$info: #5AA9E6;
+$danger:#FE6847;
+$warning:#FFCF56;
+$dark:#16262E;
+$success:#63A375;
+$primary:$success;
+$black:$dark;
+$test:$dark;
+
+a:hover{
+  text-decoration: underline;
+}
+
+
+*, html {
+
+  scroll-behavior: smooth !important;
+}
+.noHover{
+  text-decoration: none !important;
+}
+
+video {
+  max-height: 50vh !important;
+  width:auto !important;
+}
+
+#reloadVault:hover{
+  font-weight: bold;
+}
+
+#reloadVault{
+  cursor: pointer;
+}
+
+#totp-tag:hover,
+#totp-status-tag:hover,
+#google-tag:hover,
+#google-status-tag:hover,
+#download-tag:hover,
+#download-status-tag:hover{
+  box-shadow: black 0px 0px 4px;
+}
+
+#totp-tag:hover ~ #totp-status-tag,
+#totp-status-tag:hover ~ #totp-tag,
+#google-tag:hover ~ #google-status-tag,
+#google-status-tag:hover ~ #google-tag,
+#download-tag:hover ~ #download-status-tag,
+#download-status-tag:hover ~ #download-tag {
+  box-shadow: black 0px 0px 4px;
+}
+
+.tags {
+  cursor: pointer;
+}
+
+
+
+/*@import "../node_modules/bulma/css/bulma.css";*/
+@import "../node_modules/bulma/bulma.sass";

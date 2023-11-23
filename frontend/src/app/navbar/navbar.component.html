@@ -1,0 +1,79 @@
+
+<nav class="navbar is-dark is-fixed-top" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" (click)="navigateToRoute('/')" *ngIf="userService.getId()!=null">
+       <img src="assets/logo_zero_totp_light.png" alt="Logo of Zero TOTP">
+      </a>
+      <a class="navbar-item"  href="#" *ngIf="userService.getId()==null">
+        <img src="assets/logo_zero_totp_light.png" alt="Logo of Zero TOTP">
+       </a>
+  
+      <a role="button" class="navbar-burger"  id="navbarBurger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample" (click)="isNavbarExpanded = !isNavbarExpanded">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+  
+    <div id="navbarBasicExample" class="navbar-menu"[ngClass]="{'is-active': isNavbarExpanded}" >
+      <div class="navbar-start"  *ngIf="userService.getId()!=null">
+        <a class="navbar-item" (click)="navigateToRoute('vault')" [ngClass]="{'has-text-weight-bold':currentUrl == '/vault'}">
+          My vault
+        </a>
+        <a class="navbar-item" (click)="navigateToRoute('vault/add')" [ngClass]="{'has-text-weight-bold':currentUrl == '/vault/add'}">
+          Add a new code
+        </a>
+        <a class="navbar-item" (click)="navigateToRoute('preferences')" [ngClass]="{'has-text-weight-bold':currentUrl == '/preferences'}">
+          Preferences
+        </a>
+        <a class="navbar-item" (click)="navigateToRoute('account')" [ngClass]="{'has-text-weight-bold':currentUrl == '/account'}">
+          Account
+        </a>
+        <a class="navbar-item" (click)="navigateToRoute('admin')" [ngClass]="{'has-text-weight-bold':currentUrl == '/admin'}" *ngIf="userService.getIsAdmin()! == true">
+          Admin
+        </a>
+      </div>
+      <div class="navbar-start"  *ngIf="userService.getId()==null && !this.userService.getIsVaultLocal()">
+        <a class="navbar-item" (click)="changeLocation('#how-it-works')" >
+          How it works
+        </a>
+        <a class="navbar-item" (click)="changeLocation('#never-lose-data')">
+          Never lose your data
+        </a>
+        <a class="navbar-item" (click)="changeLocation('#backup-plan')">
+          Backup plan
+        </a>
+        <a class="navbar-item" (click)="changeLocation('#ZKE')">
+          Zero-Knowledge Encryption
+        </a>
+        <a class="navbar-item" (click)="changeLocation('#project')">
+          About the project
+        </a>
+      </div>
+      <div class="navbar-start"  *ngIf="this.userService.getIsVaultLocal()">
+        <a class="navbar-item"  (click)="navigateToRoute('vault')">
+          Vault backup
+        </a>
+      </div>
+  
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-info" *ngIf="userService.getId() == null" href="/signup">
+              <span [ngClass]="{'has-text-weight-bold':currentUrl == '/signup'}">Sign up</span>
+            </a>
+            <a class="button is-light" *ngIf="userService.getId()== null" href="/login">
+              <span [ngClass]="{'has-text-weight-bold':currentUrl == '/login'}">Log in</span>
+            </a>
+
+            <a class="button is-light" *ngIf="userService.getId() != null" href="/logout">
+                <span>Logout</span>
+            </a>
+            <a class="button is-light" *ngIf="this.userService.getIsVaultLocal()" href="/login">
+              <span>Close</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
