@@ -4,7 +4,7 @@ import {UserService} from '../common/User/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SecurityContext } from '@angular/core';
 import { Utils } from '../common/Utils/utils';
-import { faLock, faEyeSlash, faFingerprint, faUserLock, faHouse, faMobileScreenButton, faCode, faKitMedical, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faBugSlash, faWifi, faCircleUp, faHouse, faMobileScreenButton, faCode, faKitMedical, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
@@ -16,10 +16,10 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 
 export class HomeComponent implements OnInit {
-  faLock = faLock;
-  faEyeSlash = faEyeSlash;
+  faBugSlash = faBugSlash;
+  faWifi = faWifi;
   faGithub = faGithub;
-  faUserLock = faUserLock;
+  faCircleUp = faCircleUp;
   faHouse = faHouse;
   faMobileScreenButton = faMobileScreenButton;
   faCode = faCode;
