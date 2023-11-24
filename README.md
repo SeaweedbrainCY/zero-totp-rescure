@@ -1,6 +1,6 @@
 # Zero-TOTP
 
-<img src="https://github.com/SeaweedbrainCY/zero-totp/blob/main/frontend/src/assets/logo_zero_totp_dark.png?raw=true"/>
+<img src="https://github.com/SeaweedbrainCY/zero-totp-rescue/blob/main/frontend/src/assets/zero-totp-rescue_dark.png?raw=true"/>
 
 **Contributors :**
 
