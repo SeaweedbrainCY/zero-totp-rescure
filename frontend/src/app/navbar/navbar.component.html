@@ -17,7 +17,7 @@
   
     <div id="navbarBasicExample" class="navbar-menu"[ngClass]="{'is-active': isNavbarExpanded}" >
       <div class="navbar-start">
-        <a class="navbar-item" [ngClass]="{'has-text-weight-bold':currentUrl == '/'}">
+        <a class="navbar-item" [ngClass]="{'has-text-weight-bold':currentUrl == '/'}" (click)="navigateToRoute('/')">
           Rescue Zero-TOTP
         </a>
         
@@ -31,10 +31,10 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-light" *ngIf="userService.getId()== null" href="/login">
+            <a class="button is-light" *ngIf="userService.getId()== null" href="/openVault">
               <span [ngClass]="{'has-text-weight-bold':currentUrl == '/openVault'}">Open my vault</span>
             </a>
-            <a class="button is-light" *ngIf="this.userService.getIsVaultLocal()" href="/login">
+            <a class="button is-light" *ngIf="this.userService.getIsVaultLocal()" href="/openVault">
               <span>Close</span>
             </a>
           </div>

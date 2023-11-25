@@ -63,7 +63,7 @@ export class VaultComponent implements OnInit {
 
   ngOnInit() {
     if(this.userService.getId() == null && !this.userService.getIsVaultLocal()){
-      this.router.navigate(["/login/sessionKilled"], {relativeTo:this.route.root});
+      this.router.navigate(["/openVault/sessionKilled"], {relativeTo:this.route.root});
     } else if(this.userService.getIsVaultLocal()){
       this.local_vault_service = this.userService.getLocalVaultService();
       let vaultDate = "unknown"
@@ -86,7 +86,7 @@ export class VaultComponent implements OnInit {
             this.bnIdle.stopTimer();
             this.userService.clear();
             isTimedOut = false;
-            this.router.navigate(['/login/sessionTimeout'], {relativeTo:this.route.root});
+            this.router.navigate(['/openVault/sessionTimeout'], {relativeTo:this.route.root});
           }
         });
         const data = JSON.parse(JSON.stringify(response.body))
@@ -106,7 +106,7 @@ export class VaultComponent implements OnInit {
             errorMessage = "Server unreachable. Please check your internet connection or try again later. Do not reload this tab to avoid losing your session."
           } else if (error.status == 401){
             this.userService.clear();
-            this.router.navigate(["/login/sessionEnd"], {relativeTo:this.route.root});
+            this.router.navigate(["/openVault/sessionEnd"], {relativeTo:this.route.root});
             return;
           }
 
@@ -317,7 +317,7 @@ export class VaultComponent implements OnInit {
         errorMessage = "Server unreachable. Please check your internet connection or try again later. Do not reload this tab to avoid losing your session."
       } else if (error.status == 401){
         this.userService.clear();
-        this.router.navigate(["/login/sessionEnd"], {relativeTo:this.route.root});
+        this.router.navigate(["/openVault/sessionEnd"], {relativeTo:this.route.root});
         return;
       }
       

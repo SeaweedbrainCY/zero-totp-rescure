@@ -18,6 +18,6 @@ export class LogoutComponent implements OnInit{
 
   ngOnInit(): void {
     this.userService.clear();
-    this.router.navigate(["/login"], {relativeTo:this.route.root});
+    this.router.navigate(["/openVault"], {relativeTo:this.route.root});
   }
 }
