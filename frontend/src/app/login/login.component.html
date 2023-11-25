@@ -1,11 +1,11 @@
 <section class="hero is-halfheight mt-6" style="min-height: 70vh;">
     <div class="hero-body is-flex is-flex-direction-column	is-fullheight">
       <div class="has-text-centered	is-full is-flex is-justify-content-center block" *ngIf="!is_oauth_flow">
-        <p class="block"><span class="title is-1 is-full has-text-centered has-text-info has-text-weight-bold">
-            It's time to open your vault !</span><br />
+        <p class="block"><span class="title is-1 is-full has-text-centered has-text-danger has-text-weight-bold">
+            We are here in case of emergency 🛟 
+          </span><br />
   
-          <span class="has-text-weight-bold has-text-grey">This time, you do the magic 🪄</span>
-  
+          <span class="has-text-weight-bold has-text-danger">zero-totp.com is down or doesn't respond ? No problem ! </span>
         </p>
       </div>
       <div class="has-text-centered columns p-5" *ngIf="warning_message != ''">
@@ -13,55 +13,16 @@
           <strong class="block">{{warning_message}}</strong>
         </div>
       </div>
-      <div class="has-text-centered	is-full ">
-        <div class="field block">
-          <p class="control has-icons-left has-icons-right">
-             <input class="input " type="email" placeholder="Email" name="email" [(ngModel)]="email"/>
-            <span class="icon is-small is-left">
-              <fa-icon [icon]="faEnvelope"></fa-icon>
-            </span>
-            <span class="icon is-small is-right">
-              <fa-icon [icon]="faCheck"></fa-icon>
-            </span>
-          </p>
-         
-        </div>
-        <div class="field is-full is-flex is-justify-content-center">
-          <p class="control has-icons-left has-icons-right">
-         <input class="input block" type="password" placeholder="Passphrase" name="password" [(ngModel)]="password" (keyup.enter)="login()">
-            <span class="icon is-small is-left">
-              <fa-icon [icon]="faLock"></fa-icon>
-            </span>
-            <span class="icon is-small is-right">
-              <fa-icon [icon]="faCheck"></fa-icon>
-            </span>
-          </p>
-        </div>
-        </div>
-        <div class="has-text-centered	block">
-        
-        <div class="field">
-          <div class="control">
-            <button class="button is-info is-medium block " (click)="login()" [ngClass]="{'is-loading': isLoading}" [disabled]="isLoading">{{login_button}}
-              </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="is-flex is-justify-content-center" >
-      <div class="m-6" style="border-top: 1px lightgray solid; width: 50vw;"></div>
-    </div>
+    
   
-    <div class="is-flex is-flex-direction-column" *ngIf="!is_oauth_flow">
+    <div class="is-flex is-flex-direction-column box">
       <div class="is-flex is-justify-content-center has-text-centered">
-        <p class="block"><span class="title is-1 is-full  has-text-info has-text-weight-bold" id="openVault">
-          Open a backup</span><br />
   
-        <span class="has-text-weight-bold has-text-grey">You can open a Zero-TOTP vault saved on your laptop 💻</span>
+        <p><span class="has-text-weight-bold has-text-grey">You can open a Zero-TOTP vault saved on your laptop or Google Drive 💻</span>
       </p>
       </div>
       <div class="is-flex is-justify-content-center">
-        <div class="mt-6">
+        <div class="mt-3">
           <div class="file is-boxed">
             <label class="file-label">
               <input class="file-input" type="file" name="resume" accept=".zero-totp,.txt" (change)="openFile($event)">
@@ -76,9 +37,33 @@
             </label>
           </div>
         </div>
+        <br>
       </div>
+    </div>
+
+    <div class="field is-grouped mt-4">
+      <p class="control">
+        <a class="button is-success is-outlined" href="https://status.zero-totp.com">
+          <span>Check Zero-TOTP status</span>
+          <span class="icon is-small">
+            <fa-icon [icon]="faCircleUp"></fa-icon>
+          </span>
+        </a>
+      </p>
+      <p class="control">
+        <a class="button is-info is-outlined" href="https://zero-totp.com">
+          <span>Use Zero-TOTP with all its features</span>
+          <span class="icon is-small">
+            <fa-icon [icon]="faExternalLinkAlt"></fa-icon>
+          </span>
+        </a>
+      </p>
+    </div>
+      
+     
 
     </div>
+
 
     
   </section>
