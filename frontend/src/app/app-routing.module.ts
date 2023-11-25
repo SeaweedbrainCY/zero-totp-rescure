@@ -9,8 +9,8 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { ChangelogComponent } from './changelog/changelog.component';
 const routes: Routes = [
   {path:'', component: HomeComponent},
-  {path:'login', component: LoginComponent},
-  {path: 'login/:error_param', component: LoginComponent},
+  {path:'openVault', component: LoginComponent},
+  {path: 'openVault/:error_param', component: LoginComponent},
   {path:'vault', component: VaultComponent},
   {path:"logout", component: LogoutComponent},
   {path:"privacy", component: PrivacyPolicyComponent},
