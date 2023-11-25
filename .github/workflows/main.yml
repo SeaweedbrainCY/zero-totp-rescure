@@ -21,9 +21,10 @@ jobs:
       - name : Install dependencies 
         working-directory: ./frontend
         run: npm ci
+      - name: Install angular CLI
+        run : npm install -g @angular/cli
       - name : Build app
         working-directory: ./frontend
-        run: npm install -g @angular/cli && \
-            ng build --configuration production --subresource-integrity
+        run:  ng build --configuration production --subresource-integrity
         
         
