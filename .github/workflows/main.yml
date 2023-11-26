@@ -31,6 +31,9 @@ jobs:
       - name : Build app
         working-directory: ./frontend
         run:  ng build --configuration production --subresource-integrity
+      - name: Set up all paths 
+        working-directory: ./frontend/dist/frontend
+        run: cp index.html 404.html
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
