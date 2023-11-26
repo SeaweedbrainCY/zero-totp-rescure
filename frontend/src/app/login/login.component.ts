@@ -24,7 +24,6 @@ export class LoginComponent {
   faExternalLinkAlt=faExternalLinkAlt;
   faCircleUp=faCircleUp;
   faCloudArrowUp=faCloudArrowUp;
-  email:string = "";
   password:string = "";
   hashedPassword:string = "";
   isLoading = false;
@@ -35,10 +34,8 @@ export class LoginComponent {
   isPassphraseModalActive = false;
   local_vault_service: LocalVaultV1Service | null = null;
   is_oauth_flow=false;
-  login_button="Open my vault"
 
   constructor(
-    private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
     private userService: UserService,
@@ -55,34 +52,25 @@ export class LoginComponent {
         }
         case 'sessionKilled':{
           this.warning_message = "For your safety, you have been disconnected because you have reloaded or closed the tab";
-          this.email = this.userService.getEmail() || "";
+          
           this.userService.clear();
           break;
         }
         case 'sessionTimeout':{
           this.warning_message = "For your safety, you have been disconnected after 10min of inactivity"
-          this.email = this.userService.getEmail() || "";
           this.userService.clear();
           break;
         }
 
         case 'sessionEnd':{
           this.warning_message = "For your safety, your session must be renewed every hour."
-          this.email = this.userService.getEmail() || "";
+          
           break;
         }
-        case 'oauth':{
-          this.warning_message = "One last step, please confirm your password to complete the synchronization"
-          this.email = this.userService.getEmail() || "";
-          this.warning_message_color="is-success";
-          this.userService.clear();
-          this.is_oauth_flow=true;
-          this.login_button="Authorize"
-          break;
-        }
+
         case 'confirmPassphrase':{
           this.warning_message = "To continue, please confirm your passphrase"
-          this.email = this.userService.getEmail() || "";
+          
           this.warning_message_color="is-success";
           this.userService.clear();
           this.is_oauth_flow=true;
@@ -92,42 +80,6 @@ export class LoginComponent {
       
     }
 
-  
-  
-
-  checkEmail() : boolean{
-    const emailRegex = /\S+@\S+\.\S+/;
-    if(!emailRegex.test(this.email)){
-      superToast({
-        message: "Are your sure about your email ? ",
-        type: "is-danger",
-        dismissible: true,
-        animate: { in: 'fadeIn', out: 'fadeOut' }
-      });
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  
-  login(){
-    if(this.email == "" || this.password == ""){
-      superToast({
-        message: "Did you forget to fill something ?",
-        type: "is-danger",
-        dismissible: true,
-        animate: { in: 'fadeIn', out: 'fadeOut' }
-      });
-      return;
-    }
-    if(!this.checkEmail()){
-      return;
-    }
-    this.isLoading = true;
-    this.hashPassword()
-    
-  }
 
   openFile(event: any): void {
     const input = event.target;
@@ -313,131 +265,7 @@ export class LoginComponent {
         });
     }
 
-  hashPassword(){
-    this.http.get(ApiService.API_URL+"/login/specs?username="+encodeURIComponent(this.email),  {withCredentials:true, observe: 'response'}).subscribe((response) => {
-      
-      try{
-        const data = JSON.parse(JSON.stringify(response.body))
-        const salt = data.passphrase_salt
-        this.crypto.hashPassphrase(this.password, salt).then(hashed => {
-          if(hashed != null){
-            this.hashedPassword = hashed;
-            this.userService.setPassphraseSalt(salt);
-            this.postLoginRequest();
-          } else {
-            superToast({
-              message: "An error occured while hashing your password. Please, try again",
-              type: "is-danger",
-              dismissible: false,
-              duration: 20000,
-              animate: { in: 'fadeIn', out: 'fadeOut' }
-            });
-            this.isLoading=false;
-          }
-        });
-      } catch {
-        superToast({
-          message: "An error occured while hashing your password. Please, try again",
-          type: "is-danger",
-          dismissible: false,
-          duration: 20000,
-          animate: { in: 'fadeIn', out: 'fadeOut' }
-        });
-        this.isLoading=false;
-      }
-    }, error => {
-      superToast({
-        message: "Impossible to chat with the server ! \nCheck your internet connection or status.zero-totp.com",
-        type: "is-danger",
-        dismissible: false,
-        duration: 20000,
-        animate: { in: 'fadeIn', out: 'fadeOut' }
-      });
-      this.isLoading=false;
-    });
-  }
-
-
-  postLoginRequest(){
-    const data = {
-      email: this.email,
-      password: this.hashedPassword
-    }
-    this.http.post(ApiService.API_URL+"/login",  data, {withCredentials: true, observe: 'response'}).subscribe((response) => {
-      try{
-        const data = JSON.parse(JSON.stringify(response.body))
-        this.userService.setId(data.id);
-        this.userService.setEmail(this.email);
-        this.userService.setDerivedKeySalt(data.derivedKeySalt);
-        if(data.role == "admin"){
-          this.userService.setIsAdmin(true);
-        }
-        this.userService.setGoogleDriveSync(data.isGoogleDriveSync);
-        this.final_zke_flow();
-      } catch(e){
-        this.isLoading=false;
-        console.log(e);
-        superToast({
-          message: "Error : Impossible ro retrieve information from server",
-          type: "is-danger",
-          dismissible: true,
-        animate: { in: 'fadeIn', out: 'fadeOut' }
-        });
-      }
-    },
-    (error) => {
-      console.log(error);
-      this.isLoading=false;
-      superToast({
-        message: "Error : "+ error.error.message,
-        type: "is-danger",
-        dismissible: true,
-      animate: { in: 'fadeIn', out: 'fadeOut' }
-      });
-    });
-  }
-
-  final_zke_flow(){
-    this.deriveKey().then((derivedKey)=>{
-      this.getZKEKey().then((zke_key_encrypted)=>{
-        this.decryptZKEKey(zke_key_encrypted, derivedKey).then((zke_key)=>{
-          this.userService.set_zke_key(zke_key!);
-          if(this.is_oauth_flow){
-            this.router.navigate(["/oauth/synchronize"], {relativeTo:this.route.root});
-          } else {
-            this.router.navigate(["/vault"], {relativeTo:this.route.root});
-          }
-        }, (error)=>{
-          superToast({
-            message: error,
-            type: "is-danger",
-            dismissible: false,
-            duration: 20000,
-            animate: { in: 'fadeIn', out: 'fadeOut' }
-          });
-          this.isLoading=false;
-        });
-      }, (error)=>{
-        superToast({
-          message: error,
-          type: "is-danger",
-          dismissible: false,
-          duration: 20000,
-          animate: { in: 'fadeIn', out: 'fadeOut' }
-        });
-        this.isLoading=false;
-      });
-    },(error)=>{
-      superToast({
-        message: error,
-        type: "is-danger",
-        dismissible: false,
-        duration: 20000,
-        animate: { in: 'fadeIn', out: 'fadeOut' }
-      });
-          this.isLoading=false;
-    });
-  }
+  
 
 
   deriveKey() : Promise<CryptoKey>{
@@ -454,18 +282,6 @@ export class LoginComponent {
     });
   }
 
-  getZKEKey(): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.http.get(ApiService.API_URL+"/zke_encrypted_key",  {withCredentials:true, observe: 'response'}).subscribe((response) => {
-        const data = JSON.parse(JSON.stringify(response.body))
-        const zke_key_encrypted = data.zke_encrypted_key
-        resolve(zke_key_encrypted);
-      }, (error)=> {
-        reject("Impossible to retrieve your encryption key. Please try again later. " + error);
-      });
-    });
-    
-  }
 
 
   decryptZKEKey(zke_key_encrypted: string, derivedKey: CryptoKey): Promise<CryptoKey> {

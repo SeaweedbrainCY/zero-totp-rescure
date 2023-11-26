@@ -78,49 +78,7 @@ export class VaultComponent implements OnInit {
       this.page_title = "Backup from " + vaultDate;
       this.decrypt_and_display_vault(this.local_vault_service!.get_enc_secrets()!);
     } else {
-      this.reloadSpin = true
-      this.vault = new Map<string, Map<string,string>>();
-      this.http.get(ApiService.API_URL+"/all_secrets",  {withCredentials:true, observe: 'response'}).subscribe((response) => {
-        this.bnIdle.startWatching(600).subscribe((isTimedOut: boolean) => {
-          if(isTimedOut){
-            this.bnIdle.stopTimer();
-            this.userService.clear();
-            isTimedOut = false;
-            this.router.navigate(['/openVault/sessionTimeout'], {relativeTo:this.route.root});
-          }
-        });
-        const data = JSON.parse(JSON.stringify(response.body))
-        this.decrypt_and_display_vault(data.enc_secrets);
-      }, (error) => {
-        this.reloadSpin = true
-        if(error.status == 404){
-          this.userService.setVault(new Map<string, Map<string,string>>());
-        } else {
-          let errorMessage = "";
-          if(error.error.message != null){
-            errorMessage = error.error.message;
-          } else if(error.error.detail != null){
-            errorMessage = error.error.detail;
-          }
-          if(error.status == 0){
-            errorMessage = "Server unreachable. Please check your internet connection or try again later. Do not reload this tab to avoid losing your session."
-          } else if (error.status == 401){
-            this.userService.clear();
-            this.router.navigate(["/openVault/sessionEnd"], {relativeTo:this.route.root});
-            return;
-          }
-
-          superToast({
-            message: "Error : Impossible to retrieve your vault from the server. "+ errorMessage,
-            type: "is-danger",
-            dismissible: false,
-            duration: 20000,
-          animate: { in: 'fadeIn', out: 'fadeOut' }
-          });
-        }
-      });
-      this.get_google_drive_option();
-      this.get_preferences();
+      this.router.navigate(["/openVault/sessionKilled"], {relativeTo:this.route.root});
     }    
   }
 
@@ -129,43 +87,7 @@ export class VaultComponent implements OnInit {
         setInterval(()=> { this.generateCode() }, 100);
   }
 
-  get_preferences(){
-    this.http.get(ApiService.API_URL+"/preferences?fields=favicon_policy", {withCredentials: true, observe: 'response'}).subscribe((response) => {
-      if(response.body != null){
-        const data = JSON.parse(JSON.stringify(response.body));
-        if(data.favicon_policy != null){
-          this.faviconPolicy = data.favicon_policy;
-        } else {
-          this.faviconPolicy = "enabledOnly";
-          superToast({
-            message: "An error occured while retrieving your preferences",
-            type: "is-danger",
-            dismissible: false,
-            duration: 5000,
-          animate: { in: 'fadeIn', out: 'fadeOut' }
-          });
-        }
-      }
-    }, (error) => {
-        let errorMessage = "";
-          if(error.error.message != null){
-            errorMessage = error.error.message;
-          } else if(error.error.detail != null){
-            errorMessage = error.error.detail;
-          }
-          if(error.status == 0){
-            errorMessage = "Server unreachable. Please check your internet connection or try again later. Do not reload this tab to avoid losing your session."
-            return;
-          } 
-          superToast({
-            message: "Error : Impossible to update your preferences. "+ errorMessage,
-            type: "is-danger",
-            dismissible: false,
-            duration: 5000,
-          animate: { in: 'fadeIn', out: 'fadeOut' }
-          });
-    });
-  }
+  
 
   decrypt_and_display_vault(encrypted_vault:any){
     this.reloadSpin = true
@@ -271,9 +193,6 @@ export class VaultComponent implements OnInit {
 
   }
 
-  edit(domain:string){
-    this.router.navigate(["/vault/edit/"+domain], {relativeTo:this.route.root});
-  }
 
   copy(){
     superToast({
@@ -288,200 +207,7 @@ export class VaultComponent implements OnInit {
     this.ngOnInit();
   }
   
-  downloadVault(){
-    this.http.get(ApiService.API_URL+"/vault/export",  {withCredentials:true, observe: 'response',  responseType: 'blob' }, ).subscribe((response) => {
-      const blob = new Blob([response.body!], { type: 'text/plain' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        const date = String(formatDate(new Date (), 'dd-MM-yyyy-hh-mm-ss', 'en'));
-        a.download = 'enc_vault_' + date + '.zero-totp';
-        a.click();
-        window.URL.revokeObjectURL(url);
-      superToast({
-        message: "Encrypted vault downloaded ! 🧳\nKeep it in a safe place 🔒",
-        type: "is-success",
-        dismissible: false,
-        duration: 20000,
-      animate: { in: 'fadeIn', out: 'fadeOut' }
-      });
-    }, error => {
-      let errorMessage = "";
-      if(error.error.message != null){
-        errorMessage = error.error.message;
-      } else if(error.error.detail != null){
-        errorMessage = error.error.detail;
-      }
-
-      if(error.status == 0){
-        errorMessage = "Server unreachable. Please check your internet connection or try again later. Do not reload this tab to avoid losing your session."
-      } else if (error.status == 401){
-        this.userService.clear();
-        this.router.navigate(["/openVault/sessionEnd"], {relativeTo:this.route.root});
-        return;
-      }
-      
-      superToast({
-        message: "Error : Impossible to retrieve your vault from the server. "+ errorMessage,
-        type: "is-danger",
-        dismissible: false,
-        duration: 20000,
-      animate: { in: 'fadeIn', out: 'fadeOut' }
-      });
-    });
-  }
-
-  get_oauth_authorization_url(){
-    this.http.get(ApiService.API_URL+"/google-drive/oauth/authorization-flow",  {withCredentials:true, observe: 'response'}).subscribe((response) => { 
-      const data = JSON.parse(JSON.stringify(response.body))
-      sessionStorage.setItem("oauth_state", data.state);
-      window.location.href = data.authorization_url;
-    }, (error) => {
-        let errorMessage = "";
-        if(error.error.message != null){
-          errorMessage = error.error.message;
-        } else if(error.error.detail != null){
-          errorMessage = error.error.detail;
-        }
-        superToast({
-          message: "Error : Impossible to retrieve your vault from the server. "+ errorMessage,
-          type: "is-danger",
-          dismissible: false,
-          duration: 20000,
-        animate: { in: 'fadeIn', out: 'fadeOut' }
-        });
-    });
-  }
+  
 
 
-
-  get_google_drive_option(){
-    this.http.get(ApiService.API_URL+"/google-drive/option",  {withCredentials:true, observe: 'response'}).subscribe((response) => { 
-      const data = JSON.parse(JSON.stringify(response.body))
-      if(data.status == "enabled"){
-        this.isGoogleDriveEnabled = true;
-        this.check_last_backup();
-      } else {
-        this.isGoogleDriveEnabled = false;
-        this.isGoogleDriveSync = "false";
-      }
-    }, (error) => {
-        let errorMessage = "";
-        if(error.error.message != null){
-          errorMessage = error.error.message;
-        } else if(error.error.detail != null){
-          errorMessage = error.error.detail;
-        }
-        superToast({
-          message: "Error : Impossible to retrieve your vault from the server. "+ errorMessage,
-          type: "is-danger",
-          dismissible: false,
-          duration: 20000,
-        animate: { in: 'fadeIn', out: 'fadeOut' }
-        });
-    });
-  }
-
-  backup_vault_to_google_drive(){
-          this.http.put(ApiService.API_URL+"/google-drive/backup", {}, {withCredentials:true, observe: 'response'}, ).subscribe((response) => {
-            this.isGoogleDriveSync = "uptodate";
-            this.lastBackupDate =  String(formatDate(new Date(), 'dd/MM/yyyy HH:mm:ss', 'en'));
-          }, (error) => {
-            this.isGoogleDriveSync = 'error';
-            let errorMessage = "";
-            if(error.error.message != null){
-              errorMessage = error.error.message;
-            } else if(error.error.detail != null){
-              errorMessage = error.error.title;
-            }
-            superToast({
-              message: "Error : Impossible to backup your vault. "+ errorMessage + ". Please, try to re-sync your Google Drive account.",
-              type: "is-danger",
-              dismissible: false,
-              duration: 20000,
-            animate: { in: 'fadeIn', out: 'fadeOut' }
-            });
-          });
-  }
-
-  check_last_backup(){
-    this.http.get(ApiService.API_URL+"/google-drive/last-backup/verify",  {withCredentials:true, observe: 'response'}, ).subscribe((response) => {
-      const data = JSON.parse(JSON.stringify(response.body))
-      if(data.status == "ok"){
-        if(data.is_up_to_date == true){
-          this.isGoogleDriveSync = "uptodate";
-          const date_str = data.last_backup_date.split("T")[0] + " " + data.last_backup_date.split("T")[1];
-          this.lastBackupDate =  String(formatDate(new Date(date_str), 'dd/MM/yyyy HH:mm:ss', 'en'));
-        } else {
-          this.backup_vault_to_google_drive();
-        }
-      } else if (data.status == "corrupted_file"){
-        this.isGoogleDriveSync = "error";
-        superToast({
-          message: "Error : Your vault backup is unreadable. Please, try to re-backup your Google Drive account.",
-          type: "is-danger",
-          dismissible: false,
-          duration: 20000,
-        animate: { in: 'fadeIn', out: 'fadeOut' }
-        });
-      } else {
-        this.isGoogleDriveSync = "error";
-        superToast({
-          message: "Error : Your vault backup is unreadable. Please, try to re-backup your Google Drive account.",
-          type: "is-danger",
-          dismissible: false,
-          duration: 20000,
-        animate: { in: 'fadeIn', out: 'fadeOut' }
-        });
-      }
-    }, (error) => {
-      if(error.status == 404){
-        this.backup_vault_to_google_drive();
-      } else {
-      this.isGoogleDriveSync = 'error';
-      let errorMessage = "";
-      if(error.error.message != null){
-        errorMessage = error.error.message;
-      } else if(error.error.detail != null){
-        errorMessage = error.error.detail;
-      }
-      superToast({
-        message: "Error : Impossible to verify your vault backups. "+ errorMessage,
-        type: "is-danger",
-        dismissible: false,
-        duration: 20000,
-      animate: { in: 'fadeIn', out: 'fadeOut' }
-      });
-    }
-    });
-  }
-
-  disable_google_drive(){
-    this.http.delete(ApiService.API_URL+"/google-drive/option",  {withCredentials:true, observe: 'response'}, ).subscribe((response) => {
-      this.isGoogleDriveEnabled = false;
-      this.isGoogleDriveSync = "false";
-      superToast({
-        message: "Google Drive disabled ! ✅",
-        type: "is-success",
-        dismissible: true,
-      animate: { in: 'fadeIn', out: 'fadeOut' }
-      });
-    }, (error) => {
-      this.isGoogleDriveSync = 'error';
-      let errorMessage = "";
-      if(error.error.message != null){
-        errorMessage = error.error.message;
-      } else if(error.error.detail != null){
-        errorMessage = error.error.detail;
-      }
-      superToast({
-        message: "Error : Impossible to disable Google Drive. "+ errorMessage,
-        type: "is-danger",
-        dismissible: false,
-        duration: 20000,
-      animate: { in: 'fadeIn', out: 'fadeOut' }
-      });
-    });
-  }
 }
-
