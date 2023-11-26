@@ -2,8 +2,8 @@ name: "rescue.zero-totp.com deployment"
 
 on:
   push:
-   # tags:
-   #   - '**'
+   tags:
+      - '**'
    
 permissions:
   contents: read
