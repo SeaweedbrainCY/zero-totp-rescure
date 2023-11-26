@@ -33,6 +33,9 @@ jobs:
         run:  ng build --configuration production --subresource-integrity
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./frontend/dist
+
 
         
   deploy:
