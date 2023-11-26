@@ -6,9 +6,9 @@ on:
    #   - '**'
 
 jobs:
-  frontend-build:
+  frontend-build-deploy:
     runs-on: ubuntu-latest
-    name: Build frontend
+    name: Build frontend and deploy
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js
@@ -26,5 +26,10 @@ jobs:
       - name : Build app
         working-directory: ./frontend
         run:  ng build --configuration production --subresource-integrity
+      - name: Deploy
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend/dist  
         
         
