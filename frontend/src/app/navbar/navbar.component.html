@@ -20,10 +20,7 @@
         <a class="navbar-item" [ngClass]="{'has-text-weight-bold':currentUrl == '/'}" (click)="navigateToRoute('/')">
           Rescue Zero-TOTP
         </a>
-        
-      </div>
-      <div class="navbar-start"  *ngIf="this.userService.getIsVaultLocal()">
-        <a class="navbar-item"  (click)="navigateToRoute('vault')">
+        <a class="navbar-item"  (click)="navigateToRoute('vault')" [ngClass]="{'has-text-weight-bold':currentUrl == '/vault'}" *ngIf="currentUrl == '/vault'">
           Vault backup
         </a>
       </div>
