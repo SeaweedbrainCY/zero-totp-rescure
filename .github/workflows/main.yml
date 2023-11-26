@@ -17,9 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 'latest'
       - name: Create environment file
         working-directory: ./frontend
         run: bash generate-env.sh '${{ github.ref_name }}' '${{secrets.RSA_PUBLIC_KEY}}'
@@ -31,11 +31,7 @@ jobs:
       - name : Build app
         working-directory: ./frontend
         run:  ng build --configuration production --subresource-integrity
-      - name: Deploy to Github Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend/dist  
+
         
   deploy:
     needs: frontend-build
