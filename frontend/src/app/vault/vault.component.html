@@ -18,8 +18,13 @@
             is-one-third-tablet
             is-one-third-desktop
             is-one-third-widescreen
-            is-one-quarter-fullhd" *ngFor="let uuid of vaultDomain">
-                    <div class="card has-background-{{vault!.get(uuid)?.get('color')}} has-text-white">
+            is-one-quarter-fullhd" *ngFor="let uuid of vaultDomain" >
+                    <div class="card  has-background-info has-text-white" [ngClass]="{
+                                                                'has-background-success':vault!.get(uuid)?.get('color') == 'success' || vault!.get(uuid)?.get('color') == 'primary',
+                                                                'has-background-warning':vault!.get(uuid)?.get('color') == 'warning',
+                                                                'has-background-danger':vault!.get(uuid)?.get('color') == 'danger',
+                                                                
+                    }">
                         <header class="card-header">
                             <p class="card-header-title  has-text-white">
                                 {{vault!.get(uuid)?.get('name')}}</p>
