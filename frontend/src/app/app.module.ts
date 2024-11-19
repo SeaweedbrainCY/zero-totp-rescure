@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
 import { VaultComponent } from './vault/vault.component';
@@ -25,32 +25,25 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { BnNgIdleService } from 'bn-ng-idle'; 
 import { ChangelogComponent } from './changelog/changelog.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    NavbarComponent,
-    LoginComponent,
-    VaultComponent,
-    LogoutComponent,
-    FooterComponent,
-    PagenotfoundComponent,
-    PrivacyPolicyComponent,
-    ChangelogComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    FontAwesomeModule,
-    HttpClientModule, 
-    ClipboardModule,
-    ZXingScannerModule,
-  ],
-  providers: [UserService, Utils, Crypto, QrCodeTOTP, LocalVaultV1Service, BnNgIdleService, {
-    provide: CSP_NONCE,
-    useValue: 'random-nonce-placeholder'
-  }],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HomeComponent,
+        NavbarComponent,
+        LoginComponent,
+        VaultComponent,
+        LogoutComponent,
+        FooterComponent,
+        PagenotfoundComponent,
+        PrivacyPolicyComponent,
+        ChangelogComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        FontAwesomeModule,
+        ClipboardModule,
+        ZXingScannerModule], providers: [UserService, Utils, Crypto, QrCodeTOTP, LocalVaultV1Service, BnNgIdleService, {
+            provide: CSP_NONCE,
+            useValue: 'random-nonce-placeholder'
+        }, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
