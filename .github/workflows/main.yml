@@ -4,14 +4,23 @@ on:
   push:
    tags:
       - '**'
-   
+  workflow_call:
+      secrets:
+        GITGUARDIAN_API_KEY:
+          required: true 
+
 permissions:
   contents: read
   pages: write
   id-token: write
 
 jobs:
+  security:
+    uses: ./.github/workflows/security.yml
+    secrets:
+      GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
   frontend-build:
+    needs: [security]
     runs-on: ubuntu-latest
     name: Build frontend
     steps:

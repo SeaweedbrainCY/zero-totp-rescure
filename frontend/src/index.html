@@ -7,42 +7,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" href="favicon.ico">
 </head>
-<script nonce="random-nonce-placeholder">
-document.addEventListener('DOMContentLoaded', () => {
 
-  // Get all "navbar-burger" elements
-  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-
-  // Add a click event on each of them
-  $navbarBurgers.forEach( el => {
-    el.addEventListener('click', () => {
-
-      // Get the target from the "data-target" attribute
-      const target = el.dataset.target;
-      const $target = document.getElementById(target);
-
-      // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-      el.classList.toggle('is-active');
-      $target.classList.toggle('is-active');
-
-    });
-  });
-
-});
-$(document).ready(function() {
-
-// Check for click events on the navbar burger icon
-$(".navbar-burger").click(function() {
-
-    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-    $(".navbar-burger").toggleClass("is-active");
-    $(".navbar-menu").toggleClass("is-active");
-
-});
-});
-</script>
-<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="seaweedbrainCY" data-description="Support me on Buy me a coffee!" data-color="#5F7FFF" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 <body>
+  <a href="https://www.buymeacoffee.com/seaweedbrainCY" class="coffee-button" target="_blank" style=" z-index: 99 !important;" rel="noopener noreferrer">
+    <img src="assets/coffee_cup.svg" alt="Buy Me a Coffee">
+</a>
+
+<noscript>
+  <section class="hero  is-halfheight mt-6 " style="min-height: 70vh;">
+    <article class="hero hero-body is-flex is-justify-content-center is-flex-direction-column">
+        <div class="box">
+            <p class="has-text-centered">
+        <img src="assets/logo_zero_totp_dark.png" alt="logo" width="200" height="200"/>
+    </p>
+        <h1 class="is-size-1 has-text-weight-bold has-text-info">Hello there !<fa-icon [icon]="faPaperPlane"></fa-icon></h1>
+        <div>
+          Zero-TOTP is based on Zero-Knowledge encryption which means that your are the one that perform the encryption and decryption of your secrets.<br><br>
+
+          <strong class="has-text-danger">Your are using a browser that doesn't support Javascript. For the reasons above, you can't use Zero-TOTP without javascript</strong>. <br><br>
+      
+          You can use the following ressources to re-enable javascript on your browser : 
+          <ul style=" list-style-type: circle;list-style-position: inside;">
+            <li>
+              <a href="https://support.google.com/adsense/answer/12654?hl=en" target="_blank" rel="noopener noreferrer">Enable JavaScript on Chrome-based browsers</a>
+            </li>
+            <li>
+              <a href="https://support.mozilla.org/en-US/kb/javascript-settings-for-interactive-web-pages" target="_blank" rel="noopener noreferrer">Enable JavaScript on firefox-based browsers</a>
+              </li>
+            <li>
+              <a href="https://support.apple.com/en-mn/guide/safari/ibrw1032/16.0/mac/11.0" target="_blank" rel="noopener noreferrer">Enable JavaScript on Safari browsers</a>
+              </li>
+            <li>
+              <a href="https://support.microsoft.com/en-au/office/enable-javascript-7bb9ee74-6a9e-4dd1-babf-b0a1bb136361" target="_blank" rel="noopener noreferrer">Enable Javascript on Edge browsers</a>
+            </li>
+          </ul>
+          <p>Thanks for using Zero-TOTP.</p><br>
+          <p>Have a safe day.</p><br>
+          <p>The Zero-TOTP team ❤️</p><br>
+            </div>
+    </div>
+    </article>
+</section>
+</noscript>
+
   <app ngCspNonce="random-nonce-placeholder">
   <app-root ngCspNonce="random-nonce-placeholder"></app-root>
 </app>
