@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { toast as superToast } from 'bulma-toast'
-import { faEnvelope, faLock,  faCheck, faXmark, faFlagCheckered, faCloudArrowUp, faCircleCheck, faCircleXmark, faExternalLinkAlt,faCircleUp } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faLock,  faCheck, faXmark, faFlagCheckered, faCloudArrowUp, faCircleCheck, faCircleXmark, faExternalLinkAlt,faCircleUp, faPersonDigging, faFire } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from '../common/ApiService/api-service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -18,6 +18,8 @@ export class LoginComponent {
   faLock=faLock;
   faCheck=faCheck;
   faCircleXmark=faCircleXmark;
+  faFire=faFire;
+  faPersonDigging=faPersonDigging
   faCircleCheck=faCircleCheck;
   faXmark=faXmark;
   faFlagCheckered=faFlagCheckered;
@@ -34,6 +36,8 @@ export class LoginComponent {
   isPassphraseModalActive = false;
   local_vault_service: LocalVaultV1Service | null = null;
   is_oauth_flow=false;
+  zero_totp_maintenance=false;
+  zero_totp_issue=false;
 
   constructor(
     private router: Router,
@@ -67,6 +71,23 @@ export class LoginComponent {
           
           break;
         }
+
+        case 'maintenance':{
+          if( window.location.hostname == "zero-totp.com"){
+            this.zero_totp_maintenance = true;
+          }
+         
+          
+          break;
+        }
+
+        case 'issue':{
+          if( window.location.hostname == "zero-totp.com"){
+            this.zero_totp_issue = true;
+          }
+           
+           break;
+         }
 
         case 'confirmPassphrase':{
           this.warning_message = "To continue, please confirm your passphrase"
