@@ -13,6 +13,33 @@
           <strong class="block">{{warning_message}}</strong>
         </div>
       </div>
+      <div class="has-text-centered columns p-5" *ngIf="zero_totp_maintenance">
+        <article class="message is-info">
+          <div class="message-body has-text-centered">
+            <h1 class="is-size-4 has-text-weight-bold"> <fa-icon [icon]="faPersonDigging"></fa-icon> Zero-TOTP is under maintenance.
+            </h1><br>
+            <p class="has-text-weight-bold">
+              You have been redirected to rescue.zero-totp.com. You can still open backups of your vaults from here. Once the maintenance is over, you will be able to use Zero-TOTP again. Just refresh this page regularly.
+            </p>
+          
+        </div>
+      </article>
+      </div>
+
+
+      <div class="has-text-centered columns p-5" *ngIf="zero_totp_issue">
+        <article class="message is-warning">
+          <div class="message-body has-text-centered">
+            <h1 class="is-size-4 has-text-weight-bold"> <fa-icon [icon]="faFire"></fa-icon> Zero-TOTP is currently unavailable 
+            </h1><br>
+            <p class="has-text-weight-bold">
+             Zero-TOTP is currently unavailable due to an issue. Our team is fully mobilized to solve the problem as soon as possible. In the meantime, you can still open backups of your vaults from here. Once the issue is resolved, you will be able to use Zero-TOTP again. Just refresh this page regularly.
+            </p>
+          
+        </div>
+      </article>
+      </div>
+    
     
   
     <div class="is-flex is-flex-direction-column box">
