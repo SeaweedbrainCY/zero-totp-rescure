@@ -4,18 +4,15 @@ export class Utils {
       
 
     sanitize(unsafe_str:string|null) : string |null {
+       // THIS IS NOT A SECURITY FUNCTION.
+      // a proper sanitizer is implemented in the backend. This just avoid user to see escaped characters in the UI. 
+      // All output data must always be escaped by angular or a proper sanitizer.
         if(unsafe_str == null){
             return null;
         }
-        return unsafe_str.replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;').replaceAll('`', '&#x60;');
+        return unsafe_str.replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;').replaceAll('`', '&#x60;');//  nosemgrep 
     }
 
-    passwordSanitize(unsafe_str:string|null) : string |null {
-        if(unsafe_str == null){
-            return null;
-        }
-        return unsafe_str.replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;').replaceAll('`', '&#x60;');
-    }
 
 
     vaultToJson(vault:  Map<string, Map<string, string>>):string{

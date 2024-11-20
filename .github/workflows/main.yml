@@ -15,8 +15,12 @@ permissions:
   id-token: write
 
 jobs:
-  frontend-build:
+  security:
     uses: ./.github/workflows/security.yml
+    secrets:
+      GITGUARDIAN_API_KEY: ${{ secrets.GITGUARDIAN_API_KEY }}
+  frontend-build:
+    needs: [security]
     runs-on: ubuntu-latest
     name: Build frontend
     steps:
